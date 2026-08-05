@@ -107,3 +107,15 @@ CITY_MAIN_AIRPORT = {
     "frankfurt": "FRA",
 }
 
+def clean_text(text: str) -> str:
+    text = text.lower().strip()
+    text = re.sub(r"[^a-z0-9\s]", " ", text)
+    text = re.sub(r"\s+", " ", text)
+    stop_words = [
+        "flight", "flights", "ticket", "tickets", "trip", "travel",
+        "plan", "complete", "days", "day", "including", "hotel",
+        "hotels", "sightseeing", "under", "budget", "info", "information"
+    ]
+    words = [w for w in text.split() if w not in stop_words]
+    return " ".join(words).strip()
+
