@@ -34,3 +34,13 @@ def get_database_url():
         database_url = f"{database_url}{separator}sslmode=require"
 
     return database_url
+
+#GROQ_API_KEY Retrieval and LLM Setup
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+if not GROQ_API_KEY:
+    raise ValueError("GROQ_API_KEY is missing. Please add it to your .env file.")
+
+llm = ChatGroq(
+    model="llama-3.3-70b-versatile",
+    api_key=GROQ_API_KEY
+)
