@@ -27,4 +27,22 @@ async def get_all_tools():
     for tool in tools:
         print(tool.name)
 
-tavily_search_tool = None #returns an object 
+#returns an object 
+tavily_search_tool = None 
+
+async def get_tavily_search_tool():
+    global tavily_search_tool
+    if tavily_search_tool is not None:
+        return
+
+    tools = await client.get_tools()
+    print("\nAvailable MCP Tools:")
+
+    for tool in tools:
+        print(tool.name)
+
+    tavily_search_tool = next(
+        tool
+        for tool in tools
+        if tool.name == "tavily_search"
+    )
