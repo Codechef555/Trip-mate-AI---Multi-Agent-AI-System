@@ -46,3 +46,14 @@ async def get_tavily_search_tool():
         for tool in tools
         if tool.name == "tavily_search"
     )
+    
+# This function can be used to call the tavily_search tool with a query in backend.py
+async def tavily_mcp_search(query: str):
+    await get_tavily_search_tool()
+    result = await tavily_search_tool.ainvoke(
+        {
+            "query": query
+        }
+    )
+    return result
+    # print(result)
