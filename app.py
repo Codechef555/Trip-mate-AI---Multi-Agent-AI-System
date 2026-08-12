@@ -11,6 +11,9 @@ from backend import run_travel_agent
 
 BASE_DIR = Path(__file__).resolve().parent
 
+import nest_asyncio
+nest_asyncio.apply()
+
 app = FastAPI(
     title="TripMate AI",
     description="LangGraph Multi-Agent Travel Planner with FastAPI Frontend",
