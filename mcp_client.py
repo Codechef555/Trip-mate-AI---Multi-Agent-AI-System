@@ -39,3 +39,40 @@ llm = ChatGroq(
     model="llama-3.3-70b-versatile",
     api_key=GROQ_API_KEY
 )
+
+#MCP client configuration 
+client = MultiServerMCPClient(
+    {
+        "tavily": {
+            "transport": "streamable_http",
+            "url": (
+                "https://mcp.tavily.com/mcp/"
+                f"?tavilyApiKey={TAVILY_API_KEY}"
+            )
+        },
+
+        "aviationstack": {
+            "transport": "stdio",
+            "command": "uvx",
+            "args": [
+                "aviationstack-mcp"
+            ],
+            "env": AVIATION_ENV
+        },
+
+        "weather": {
+            "transport": "stdio",
+
+            # Use the same Python environment that runs app.py.
+            "command": sys.executable,
+
+            # Automatically use custom_weather_mcp_server.py
+            # from the current project directory.
+            "args": [
+                str(WEATHER_SERVER_PATH)
+            ],
+
+            "env": WEATHER_ENV
+        }
+    }
+)
