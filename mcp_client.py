@@ -21,3 +21,15 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 # This replaces the hard-coded Windows paths.
 PROJECT_DIR = Path(__file__).resolve().parent
 WEATHER_SERVER_PATH = PROJECT_DIR / "custom_weather_mcp_server.py"
+
+# Preserve the complete Windows environment when starting
+# local stdio MCP servers.
+AVIATION_ENV = os.environ.copy()
+AVIATION_ENV["AVIATION_STACK_API_KEY"] = (
+    AVIATION_STACK_API_KEY or ""
+)
+
+WEATHER_ENV = os.environ.copy()
+WEATHER_ENV["OPENWEATHER_API_KEY"] = (
+    OPENWEATHER_API_KEY or ""
+)
