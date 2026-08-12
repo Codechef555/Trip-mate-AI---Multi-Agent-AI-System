@@ -86,7 +86,6 @@ async def travel_planner(request_data: TravelRequest):
         )
 
 
-
 @app.get("/health")
 async def health_check():
     return {
@@ -99,7 +98,7 @@ async def health_check():
 async def favicon():
     return JSONResponse(content={})
 
-
+#portal path setup
 
 if __name__ == "__main__":
     uvicorn.run(

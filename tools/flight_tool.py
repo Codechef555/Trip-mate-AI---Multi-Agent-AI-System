@@ -1,4 +1,4 @@
-import pycountry
+Koimport pycountry
 import os
 import re
 import airportsdata
@@ -80,6 +80,7 @@ COUNTRY_MAIN_AIRPORT = {
     "ES": "MAD",
 }
 
+#City airport code 
 CITY_MAIN_AIRPORT = {
     "dhaka": "DAC",
     "delhi": "DEL",

@@ -10,6 +10,8 @@ os.environ["REQUESTS_CA_BUNDLE"] = certifi.where()
 load_dotenv()
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 
+#it will automatically update the API URL if there any changes in future 
+
 client = MultiServerMCPClient(
     {
        "tavily": {

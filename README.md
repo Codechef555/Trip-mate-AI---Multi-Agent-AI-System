@@ -1,380 +1,913 @@
-# ✈️ TripMate - Multi-Agent Travel Planning Assistant
 
-A demonstration project showcasing how to build a **safe, reviewable, and production-inspired multi-agent AI system** using **LangGraph**, **Model Context Protocol (MCP)**, **FastAPI**, and **Human-in-the-Loop (HITL)** workflows.
+✈️ TripMate - Multi-Agent Travel Planning Assistant
 
-TripMate illustrates how multiple AI agents can collaborate under the supervision of a central coordinator while enforcing input validation and requiring human approval before delivering final travel plans.
+A demonstration project showcasing how to build a safe, reviewable, and production-inspired multi-agent AI system using LangGraph, Model Context Protocol (MCP), FastAPI, and Human-in-the-Loop (HITL) workflows.
 
----
-
-# Table of Contents
-
-* [Overview](#overview)
-* [Architecture](#architecture)
-* [Key Features](#key-features)
-* [Project Structure](#project-structure)
-* [Technology Stack](#technology-stack)
-* [Prerequisites](#prerequisites)
-* [Installation](#installation)
-* [Running the Application](#running-the-application)
-* [Running the MCP Server](#running-the-mcp-server)
-* [API Reference](#api-reference)
-* [Configuration](#configuration)
-* [How It Works](#how-it-works)
-* [Development Notes](#development-notes)
-* [Future Improvements](#future-improvements)
-* [Contributing](#contributing)
-* [License](#license)
+TripMate demonstrates how a central Supervisor Agent coordinates four specialized AI agents, each responsible for a different part of the travel-planning process. MCP servers provide standardized access to external tools and services while human approval is required before the final itinerary is delivered.
 
 ---
 
-# Overview
+Architecture
 
-TripMate demonstrates a modern **multi-agent orchestration pattern** where specialized AI agents collaborate to generate personalized travel itineraries.
+TripMate uses a Supervisor + Four Specialized Agents + MCP architecture.
 
-Instead of relying on a single LLM, the application introduces:
+                                  User
+                                    │
+                                    ▼
+                          FastAPI Web Interface
+                                    │
+                                    ▼
+                            Input Guardrails
+                                    │
+                                    ▼
+                           Supervisor Agent
+                                    │
+              ┌─────────────────────┼─────────────────────┐
+              │                     │                     │
+              ▼                     ▼                     ▼
+       Planner Agent         Weather Agent        Activities Agent
+              │                     │                     │
+              │                     ▼                     ▼
+              │              Weather MCP Server    Activities MCP Server
+              │                     │                     │
+              │                     └─────────┬───────────┘
+              │                               │
+              │                               ▼
+              │                        External APIs
+              │
+              ▼
+       Budget & Logistics Agent
+              │
+              ▼
+       Budget / Currency /
+       Transport MCP Server
+              │
+              ▼
+       External APIs / Services
+              │
+              └──────────────────────┐
+                                     ▼
+                              Draft Travel Plan
+                                     │
+                                     ▼
+                              Human Approval
+                                /          \
+                         Approved        Revision
+                            │               │
+                            │               ▼
+                            │        Supervisor Agent
+                            │               │
+                            │               └──────► Agents
+                            │
+                            ▼
+                      Final Travel Plan
 
-* A **Supervisor Agent** responsible for orchestrating workflow execution
-* **Input Guardrails** that validate and sanitize incoming requests
-* **Human-in-the-Loop (HITL)** approval before finalizing travel plans
-* **MCP-powered external tools** for domain-specific capabilities (weather, adapters, etc.)
+Four-Agent Architecture
 
-The project is intended as a reference implementation for developers learning LangGraph, MCP, and agent orchestration patterns.
+1. Planner Agent
+
+The Planner Agent is responsible for understanding the user's travel requirements and constructing the overall itinerary.
+
+Responsibilities:
+
+* Understand destination, duration, dates, and traveler preferences.
+* Identify required planning tasks.
+* Coordinate itinerary structure.
+* Combine information returned by other agents.
+* Produce the initial travel-plan draft.
+* Identify missing information that requires clarification.
+
+The Planner Agent should primarily focus on planning and synthesis rather than directly accessing every external service.
+
+Example:
+
+User:
+"Plan a 7-day trip to Japan for two people in April."
+
+Planner Agent:
+├── Determine cities
+├── Determine daily itinerary
+├── Request weather information
+├── Request activity recommendations
+├── Request budget/logistics information
+└── Build draft itinerary
 
 ---
 
-# Architecture
+2. Weather Agent
 
-```text
-                User
-                  │
-                  ▼
-        FastAPI Web Interface
-                  │
-                  ▼
-          Input Guardrails
-                  │
-                  ▼
-         Supervisor Agent
-                  │
-      ┌───────────┼───────────┐
-      │           │           │
-      ▼           ▼           ▼
- Planner      Weather MCP   Other Tools
-  Agent         Server
+The Weather Agent specializes in weather-related travel information.
+
+Instead of embedding weather API logic directly inside the agent, the agent communicates with a Weather MCP Server.
+
+Responsibilities:
+
+* Retrieve current weather information.
+* Retrieve forecasts.
+* Compare weather conditions across destinations.
+* Identify potentially unsuitable outdoor activities.
+* Provide weather-aware recommendations to the Planner Agent.
+
+Example MCP tools:
+
+get_current_weather
+get_weather_forecast
+get_weather_by_date
+compare_destination_weather
+
+Example workflow:
+
+Weather Agent
       │
       ▼
- Draft Travel Plan
+Weather MCP Client
       │
       ▼
- Human Approval (HITL)
+Weather MCP Server
       │
       ▼
- Final Approved Plan
-```
+Weather API
+      │
+      ▼
+Weather data
+      │
+      ▼
+Weather Agent
+      │
+      ▼
+Supervisor / Planner Agent
+
+The Weather Agent should return structured information to the Supervisor rather than directly modifying the final itinerary.
+
+Example:
+
+{
+  "destination": "Tokyo",
+  "date": "2026-04-15",
+  "temperature": "18°C",
+  "condition": "Partly cloudy",
+  "rain_probability": 20,
+  "recommendation": "Suitable for outdoor sightseeing"
+}
 
 ---
 
-# Key Features
+3. Activities & Research Agent
 
-## Multi-Agent Coordination
+The Activities Agent specializes in finding attractions, experiences, restaurants, landmarks, and other destination-specific activities.
 
-* Built using **LangGraph**
-* Supervisor-managed workflow
-* Extensible agent architecture
-* Modular tool integration
+This agent can use one or more MCP servers to access external travel information.
 
-## Supervisor Agent
+Responsibilities:
 
-* Controls execution flow
-* Delegates tasks to specialized agents
-* Coordinates planning pipeline
+* Find attractions.
+* Find activities based on traveler preferences.
+* Find family-friendly or accessibility-friendly activities.
+* Identify opening hours.
+* Identify estimated activity duration.
+* Recommend activities based on location.
+* Avoid scheduling geographically distant activities on the same day when possible.
 
-## Input Guardrails
+Example MCP tools:
 
-* Validate user requests
-* Prevent invalid inputs
-* Improve reliability and safety
+search_attractions
+search_activities
+search_restaurants
+get_place_details
+get_opening_hours
+search_nearby_places
 
-## Human-in-the-Loop (HITL)
+Example workflow:
 
-* Review generated itineraries
-* Approve or request revisions
-* Keeps humans in control before final output
+Activities Agent
+       │
+       ▼
+Activities MCP Client
+       │
+       ▼
+Activities MCP Server
+       │
+       ▼
+Travel / Maps / Places APIs
+       │
+       ▼
+Activity results
+       │
+       ▼
+Activities Agent
+       │
+       ▼
+Supervisor
 
-## MCP Integration
+Example output:
 
-* Demonstrates communication with external tools
-* Example Weather MCP server included
-* Easily extensible for additional services
-
-## Interactive Web UI
-
-* Built with FastAPI
-* Simple browser interface
-* Thread-based conversation support
+{
+  "destination": "Tokyo",
+  "activities": [
+    {
+      "name": "Senso-ji",
+      "category": "Cultural",
+      "duration_hours": 2,
+      "area": "Asakusa"
+    },
+    {
+      "name": "Tokyo Skytree",
+      "category": "Observation Deck",
+      "duration_hours": 2,
+      "area": "Sumida"
+    }
+  ]
+}
 
 ---
 
-# Project Structure
+4. Budget & Logistics Agent
 
-```text
+The Budget & Logistics Agent is responsible for estimating travel costs and helping the Supervisor construct a practical itinerary.
+
+This agent can use MCP servers for currency conversion, transportation information, and other logistical services.
+
+Responsibilities:
+
+* Estimate daily travel costs.
+* Convert currencies.
+* Estimate transportation costs.
+* Compare transportation options.
+* Estimate activity costs.
+* Track the user's budget.
+* Identify potential budget violations.
+* Provide logistical constraints to the Planner Agent.
+
+Example MCP tools:
+
+convert_currency
+estimate_transport_cost
+search_transport_options
+estimate_activity_cost
+calculate_daily_budget
+
+Example workflow:
+
+Budget Agent
+      │
+      ▼
+Logistics MCP Client
+      │
+      ▼
+Logistics MCP Server
+      │
+      ├── Currency API
+      ├── Transport API
+      └── Pricing API
+      │
+      ▼
+Cost / logistics data
+      │
+      ▼
+Budget Agent
+      │
+      ▼
+Supervisor
+
+Example output:
+
+{
+  "currency": "JPY",
+  "daily_budget": 25000,
+  "estimated_transport": 5000,
+  "estimated_activities": 7000,
+  "estimated_food": 8000,
+  "remaining_budget": 5000
+}
+
+---
+
+Supervisor Agent
+
+The Supervisor Agent is the central coordinator of the four-agent system.
+
+It does not perform every task itself. Instead, it determines which specialized agent should perform each task and combines their results.
+
+                    Supervisor Agent
+                           │
+          ┌────────────────┼────────────────┐
+          │                │                │
+          ▼                ▼                ▼
+      Planner           Weather         Activities
+       Agent             Agent             Agent
+          │                │                │
+          └────────────────┼────────────────┘
+                           │
+                           ▼
+                    Budget Agent
+                           │
+                           ▼
+                    Draft Itinerary
+
+The Supervisor is responsible for:
+
+* Understanding the overall task.
+* Delegating work to specialized agents.
+* Managing agent execution order.
+* Passing relevant context between agents.
+* Detecting incomplete results.
+* Requesting additional agent work when necessary.
+* Combining agent outputs.
+* Sending the draft to the Human-in-the-Loop approval stage.
+
+---
+
+MCP Architecture
+
+MCP acts as the standardized communication layer between AI agents and external tools.
+
+Instead of implementing external API integrations directly inside every agent, TripMate separates:
+
+AI Agent
+   │
+   ▼
+MCP Client
+   │
+   ▼
+MCP Server
+   │
+   ▼
+External Tool / API
+
+This provides a clean separation between reasoning and external tool execution.
+
+Recommended MCP Servers
+
+TripMate can be organized around multiple domain-specific MCP servers:
+
+                         TripMate
+                            │
+                     Supervisor Agent
+                            │
+       ┌────────────────────┼────────────────────┐
+       │                    │                    │
+       ▼                    ▼                    ▼
+ Weather Agent       Activities Agent      Budget Agent
+       │                    │                    │
+       ▼                    ▼                    ▼
+ Weather MCP         Activities MCP       Logistics MCP
+ Server              Server               Server
+       │                    │                    │
+       ▼                    ▼                    ▼
+ Weather API          Places API           Currency API
+                                            Transport API
+
+The Planner Agent consumes the results from the specialized agents and creates the itinerary.
+
+---
+
+MCP Client Layer
+
+The project should contain an MCP client abstraction that hides connection details from the agents.
+
+Example:
+
+mcp_client.py
+
+                    MCP Client
+                        │
+        ┌───────────────┼────────────────┐
+        │               │                │
+        ▼               ▼                ▼
+ Weather MCP      Activities MCP    Logistics MCP
+ Client            Client            Client
+
+The client layer can provide helper methods such as:
+
+get_weather()
+get_forecast()
+search_activities()
+get_place_details()
+convert_currency()
+estimate_transport()
+
+The agents should call these helpers instead of directly implementing HTTP requests to external APIs.
+
+---
+
+Example MCP Tool Organization
+
+A scalable project can organize MCP tools as follows:
+
+MCP Servers
+│
+├── Weather MCP Server
+│   ├── get_current_weather
+│   ├── get_weather_forecast
+│   └── get_weather_by_date
+│
+├── Activities MCP Server
+│   ├── search_attractions
+│   ├── search_activities
+│   ├── search_restaurants
+│   ├── get_place_details
+│   └── get_opening_hours
+│
+└── Logistics MCP Server
+    ├── convert_currency
+    ├── search_transport_options
+    ├── estimate_transport_cost
+    └── estimate_activity_cost
+
+Additional MCP servers can be added later without changing the overall LangGraph architecture.
+
+---
+
+Complete Request Flow
+
+A complete request can flow through the system as follows:
+
+1. User
+   │
+   ▼
+2. FastAPI
+   │
+   ▼
+3. Input Guardrails
+   │
+   ▼
+4. Supervisor Agent
+   │
+   ├──────────────► Planner Agent
+   │
+   ├──────────────► Weather Agent
+   │                    │
+   │                    ▼
+   │               Weather MCP
+   │
+   ├──────────────► Activities Agent
+   │                    │
+   │                    ▼
+   │               Activities MCP
+   │
+   └──────────────► Budget Agent
+                        │
+                        ▼
+                   Logistics MCP
+
+5. Supervisor combines results
+   │
+   ▼
+6. Draft Travel Plan
+   │
+   ▼
+7. Human Review
+   │
+   ├── Approve ──────────────► Final Plan
+   │
+   └── Request Changes
+             │
+             ▼
+       Supervisor Agent
+             │
+             ▼
+        Specialized Agents
+             │
+             ▼
+        Revised Draft
+             │
+             ▼
+        Human Review
+
+---
+
+LangGraph State
+
+A shared LangGraph state can be used to pass information between the Supervisor and specialized agents.
+
+Example conceptual state:
+
+class TravelState:
+    user_request: str
+    destination: str
+    dates: dict
+    preferences: dict
+
+    weather_data: dict
+    activities: list
+    budget_data: dict
+    logistics_data: dict
+
+    draft_itinerary: dict
+    human_feedback: str
+    approved: bool
+
+The Supervisor uses this shared state to coordinate the agents.
+
+---
+
+LangGraph Node Design
+
+The graph can be structured conceptually as:
+
+START
+  │
+  ▼
+Input Guardrails
+  │
+  ▼
+Supervisor
+  │
+  ├──► Planner Agent
+  │
+  ├──► Weather Agent ──► Weather MCP
+  │
+  ├──► Activities Agent ──► Activities MCP
+  │
+  └──► Budget Agent ──► Logistics MCP
+  │
+  ▼
+Synthesize Itinerary
+  │
+  ▼
+Human Approval
+  │
+  ├── Approved ─────────► Final Plan
+  │
+  └── Revision ─────────► Supervisor
+
+Depending on the implementation, the specialized agents can execute sequentially or in parallel when their tasks are independent.
+
+For example, Weather, Activities, and Budget research can often run concurrently after the Planner/Supervisor has extracted the basic trip requirements.
+
+---
+
+Human-in-the-Loop
+
+MCP tools provide external information, but the system should not automatically treat that information as final truth.
+
+The generated itinerary should pass through a Human-in-the-Loop checkpoint.
+
+Agent Results
+     │
+     ▼
+Draft Itinerary
+     │
+     ▼
+Human Review
+     │
+ ┌───┴────┐
+ │        │
+Approve   Revise
+ │        │
+ ▼        ▼
+Final    Supervisor
+Plan       │
+           ▼
+        Agents
+
+The human can:
+
+* Approve the itinerary.
+* Request changes.
+* Reject recommendations.
+* Adjust budget.
+* Change destinations.
+* Change activities.
+* Ask for different transportation options.
+
+This makes the workflow safer and easier to review.
+
+---
+
+MCP Safety Considerations
+
+Because MCP servers can expose external tools, each MCP integration should be treated as an explicit capability boundary.
+
+Recommended safeguards include:
+
+* Validate all tool inputs.
+* Validate MCP tool outputs before passing them to other agents.
+* Restrict tools to the minimum required permissions.
+* Apply timeouts to external calls.
+* Handle MCP connection failures gracefully.
+* Never expose API keys to agents or users.
+* Log tool calls for debugging and auditing.
+* Distinguish trusted application state from external tool output.
+* Require human approval before consequential actions.
+* Avoid allowing recommendation agents to directly perform bookings or purchases.
+
+For example:
+
+Agent
+  │
+  ▼
+Input Validation
+  │
+  ▼
+MCP Tool
+  │
+  ▼
+Output Validation
+  │
+  ▼
+Supervisor
+
+For future booking capabilities, the architecture should introduce a separate approval boundary:
+
+Recommendation
+     │
+     ▼
+Human Approval
+     │
+     ▼
+Booking Tool
+
+The system should not automatically convert an AI recommendation into a real-world purchase or reservation.
+
+---
+
+Project Structure
+
+A four-agent MCP implementation can evolve into:
+
 .
 ├── app.py
 ├── backend.py
 ├── mcp_client.py
-├── custom_weather_mcp_server.py
+│
+├── agents/
+│   ├── planner_agent.py
+│   ├── weather_agent.py
+│   ├── activities_agent.py
+│   └── budget_agent.py
+│
+├── mcp_servers/
+│   ├── weather_mcp_server.py
+│   ├── activities_mcp_server.py
+│   └── logistics_mcp_server.py
+│
+├── graph/
+│   ├── state.py
+│   └── workflow.py
+│
 ├── templates/
 ├── static/
 ├── requirements.txt
 ├── README.md
 └── LICENSE
-```
 
-### File Description
-
-| File                           | Purpose                                                |
-| ------------------------------ | ------------------------------------------------------ |
-| `app.py`                       | FastAPI application and REST endpoints                 |
-| `backend.py`                   | Core LangGraph orchestration and travel planning logic |
-| `mcp_client.py`                | Client helpers for communicating with MCP servers      |
-| `custom_weather_mcp_server.py` | Example Weather MCP server                             |
-| `templates/`                   | HTML templates                                         |
-| `static/`                      | JavaScript, CSS, and frontend assets                   |
+The existing single "custom_weather_mcp_server.py" can remain as the initial MCP example, while the Activities and Logistics servers can be added incrementally.
 
 ---
 
-# Technology Stack
+Running the MCP Servers
 
-* Python 3.10+
-* FastAPI
-* LangGraph
-* LangChain
-* MCP (Model Context Protocol)
-* Jinja2 Templates
-* HTML/CSS/JavaScript
-
----
-
-# Prerequisites
-
-Before running the project, ensure you have:
-
-* Python 3.10 or newer
-* Git
-* pip
-* Virtual Environment (`venv` recommended)
-
----
-
-# Installation
-
-## 1. Clone the Repository
-
-```bash
-git clone <repository-url>
-
-cd <repository-name>
-```
-
-## 2. Create a Virtual Environment
-
-### Windows
-
-```bash
-python -m venv .venv
-
-.venv\Scripts\Activate.ps1
-```
-
-### macOS/Linux
-
-```bash
-python3 -m venv .venv
-
-source .venv/bin/activate
-```
-
-## 3. Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
-# Running the Application
-
-## Option 1
-
-```bash
-python app.py
-```
-
-## Option 2 (Recommended)
-
-```bash
-uvicorn app:app --reload --host 127.0.0.1 --port 8000
-```
-
-Open your browser:
-
-```text
-http://127.0.0.1:8000
-```
-
----
-
-# Running the MCP Server
-
-The project includes an example MCP server that provides weather-related functionality.
-
-Start it in a separate terminal:
-
-```bash
-python custom_weather_mcp_server.py
-```
-
-The backend can then communicate with this server through the MCP client.
-
----
-
-# API Reference
-
-## Create or Resume a Planning Session
-
-### POST `/api/travel`
-
-Creates a new planning thread or resumes an existing one.
-
-### Request
-
-```json
-{
-  "message": "Plan a 5-day trip to Japan",
-  "thread_id": "optional-thread-id"
-}
-```
-
----
-
-## Approve or Revise a Draft
-
-### POST `/api/travel/approve`
-
-Approve a generated itinerary or request revisions.
-
-### Request
-
-```json
-{
-  "thread_id": "thread-id",
-  "approved": true,
-  "feedback": "optional comments"
-}
-```
-
----
-
-## Health Check
-
-### GET `/health`
-
-Returns application status and enabled features.
-
----
-
-# Configuration
-
-Secrets and API keys are **not included** in the repository.
-
-Configure credentials using environment variables or a `.env` file.
+Each MCP server can run independently.
 
 Example:
 
-```text
+python mcp_servers/weather_mcp_server.py
+
+python mcp_servers/activities_mcp_server.py
+
+python mcp_servers/logistics_mcp_server.py
+
+The FastAPI/LangGraph application then communicates with the required MCP servers through "mcp_client.py".
+
+For local development, each MCP server can run as a separate process.
+
+---
+
+Example End-to-End Scenario
+
+User request:
+
+Plan a 7-day trip to Japan for two people with a
+budget of ₹2,00,000. We enjoy culture, food and
+outdoor activities.
+
+Step 1 — Guardrails
+
+The system validates:
+
+Destination: Japan
+Duration: 7 days
+Travelers: 2
+Budget: ₹2,00,000
+Preferences:
+  - Culture
+  - Food
+  - Outdoor activities
+
+Step 2 — Supervisor
+
+The Supervisor determines that four agents are required.
+
+Supervisor
+   │
+   ├── Planner Agent
+   ├── Weather Agent
+   ├── Activities Agent
+   └── Budget Agent
+
+Step 3 — Weather Agent
+
+The Weather Agent requests forecast information through the Weather MCP server.
+
+Weather Agent
+      │
+      ▼
+Weather MCP
+      │
+      ▼
+Forecast Service
+
+The agent determines which days are more suitable for outdoor activities.
+
+Step 4 — Activities Agent
+
+The Activities Agent queries the Activities MCP server.
+
+Activities Agent
+      │
+      ▼
+Activities MCP
+      │
+      ▼
+Places / Attractions Service
+
+It returns suitable cultural attractions, food experiences, and outdoor activities.
+
+Step 5 — Budget Agent
+
+The Budget Agent queries the Logistics MCP server.
+
+Budget Agent
+      │
+      ▼
+Logistics MCP
+      │
+      ├── Currency
+      ├── Transport
+      └── Cost estimation
+
+It determines whether the proposed activities and transportation fit the user's budget.
+
+Step 6 — Planner Agent
+
+The Planner Agent combines the available information into an itinerary.
+
+Weather
+   +
+Activities
+   +
+Budget
+   +
+User Preferences
+   │
+   ▼
+Planner Agent
+   │
+   ▼
+Draft Itinerary
+
+Step 7 — Human Approval
+
+The draft is displayed to the user.
+
+Draft Itinerary
+      │
+      ▼
+   User Review
+      │
+ ┌────┴─────┐
+ │          │
+Approve    Revise
+ │          │
+ ▼          ▼
+Final     Supervisor
+Plan
+
+---
+
+API Reference
+
+Create or Resume a Planning Session
+
+POST "/api/travel"
+
+Creates a new planning thread or resumes an existing one.
+
+Request
+
+{
+  "message": "Plan a 7-day trip to Japan for two people with a budget of ₹2,00,000",
+  "thread_id": "optional-thread-id"
+}
+
+The Supervisor Agent determines which specialized agents and MCP tools are required.
+
+---
+
+Approve or Revise a Draft
+
+POST "/api/travel/approve"
+
+Approve a generated itinerary or request revisions.
+
+Request
+
+{
+  "thread_id": "thread-id",
+  "approved": true,
+  "feedback": "The itinerary looks good."
+}
+
+If "approved" is "false", the feedback is returned to the Supervisor Agent and the relevant specialized agents are invoked again.
+
+---
+
+Configuration
+
+Secrets and API keys are not included in the repository.
+
+Configure credentials using environment variables or a ".env" file.
+
+Example:
+
 OPENAI_API_KEY=your_api_key
 LANGSMITH_API_KEY=your_api_key
-```
+WEATHER_API_KEY=your_api_key
+ACTIVITIES_API_KEY=your_api_key
+CURRENCY_API_KEY=your_api_key
 
-Add any additional credentials required by LangGraph, LangChain, or external MCP tools.
-
----
-
-# How It Works
-
-1. User submits a travel request.
-2. Input Guardrails validate the request.
-3. Supervisor Agent analyzes the task.
-4. Specialized agents perform planning.
-5. MCP tools are invoked when external information is needed.
-6. A draft itinerary is generated.
-7. Human reviews the plan.
-8. User approves or requests revisions.
-9. Final itinerary is returned.
+Each MCP server should only receive the credentials required for its own tools.
 
 ---
 
-# Development Notes
+Future MCP Extensions
 
-* FastAPI serves the frontend and REST API.
-* `backend.py` contains synchronous helper wrappers while internally interacting with asynchronous MCP utilities.
-* `nest_asyncio` is applied to simplify interoperability between synchronous and asynchronous execution.
-* The architecture is intentionally modular to make adding new agents and MCP tools straightforward.
+The architecture can be extended with additional MCP servers without changing the core Supervisor workflow.
 
----
+Potential additions include:
 
-# Future Improvements
+Flight MCP Server
+Hotel MCP Server
+Restaurant MCP Server
+Maps MCP Server
+Calendar MCP Server
+Visa / Travel Requirements MCP Server
+Currency MCP Server
+Transportation MCP Server
 
-Potential enhancements include:
+For example:
 
-* Flight booking integration
-* Hotel recommendation agents
-* Restaurant recommendation tools
-* Budget optimization agent
-* Calendar integration
-* Maps integration
-* Real-time weather APIs
-* Authentication and user profiles
-* Persistent conversation history
-* Docker deployment
-* CI/CD pipeline
-* Automated test suite
+                    Supervisor
+                        │
+       ┌────────────────┼─────────────────┐
+       │                │                 │
+       ▼                ▼                 ▼
+   Weather          Activities        Budget
+     Agent             Agent            Agent
+       │                │                 │
+       ▼                ▼                 ▼
+ Weather MCP      Activities MCP    Logistics MCP
+       │                │                 │
+       └────────────────┼─────────────────┘
+                        │
+                        ▼
+                  Planner Agent
+                        │
+                        ▼
+                 Draft Itinerary
+                        │
+                        ▼
+                  Human Approval
 
----
-
-# Contributing
-
-Contributions are welcome.
-
-If you would like to improve the project:
-
-1. Fork the repository.
-2. Create a feature branch.
-3. Commit your changes.
-4. Open a Pull Request.
-
-Bug reports, documentation improvements, and new MCP adapter examples are always appreciated.
-
----
-
-# License
-
-This project is distributed under the terms specified in the `LICENSE` file.
+The important architectural principle is that agents decide what information they need, while MCP servers provide controlled access to external capabilities.
 
 ---
 
-# Acknowledgements
+Design Principle
 
-This project demonstrates practical patterns for building AI applications using:
+TripMate separates responsibilities into three layers:
 
-* LangGraph
-* Model Context Protocol (MCP)
-* FastAPI
-* Human-in-the-Loop workflows
-* Multi-Agent orchestration
+┌──────────────────────────────────────┐
+│           AI Reasoning Layer         │
+│                                      │
+│ Supervisor + 4 Specialized Agents    │
+└──────────────────┬───────────────────┘
+                   │
+                   ▼
+┌──────────────────────────────────────┐
+│             MCP Layer                │
+│                                      │
+│ MCP Clients + MCP Servers            │
+└──────────────────┬───────────────────┘
+                   │
+                   ▼
+┌──────────────────────────────────────┐
+│          External Services           │
+│                                      │
+│ Weather / Places / Currency / Maps   │
+└──────────────────────────────────────┘
 
----
+This separation makes the system easier to test, review, extend, and secure.
 
-## Contact
-
-If you have questions, suggestions, or encounter any issues, please open an issue in the repository.
+The Supervisor controls orchestration, the four specialized agents perform domain reasoning, and MCP provides standardized access to external tools. Finally, the Human-in-the-Loop checkpoint controls the transition from an AI-generated draft to an approved travel plan.
