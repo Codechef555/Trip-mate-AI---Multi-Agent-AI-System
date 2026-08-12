@@ -76,3 +76,42 @@ client = MultiServerMCPClient(
         }
     }
 )
+
+#Diagnostic function
+async def get_all_tools():
+    """
+    Load each MCP server separately.
+
+    A broken server will no longer prevent the other
+    working servers from loading.
+    """
+
+    all_tools = []
+
+    for server_name in (
+        "tavily",
+        "aviationstack",
+        "weather"
+    ):
+        try:
+            tools = await client.get_tools(
+                server_name=server_name
+            )
+
+            all_tools.extend(tools)
+
+            print(
+                f"\nAvailable tools from "
+                f"{server_name} MCP:\n"
+            )
+
+            for tool in tools:
+                print(tool.name)
+
+        except Exception as error:
+            print(
+                f"\nCould not connect to "
+                f"{server_name} MCP:\n{error}\n"
+            )
+
+    return all_tools
