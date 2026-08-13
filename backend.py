@@ -57,18 +57,47 @@ class TravelState(TypedDict):
     itinerary: str
     llm_calls: int
 
-#Flight Agent
-def flight_agent(state: TravelState):
-    query = state["user_query"]
-    flight_data = search_flights(query)
+# =========================
+# Flight Agent
+# =========================
 
-    return {
-        "flight_results": flight_data,
-        "messages": [
-            AIMessage(content="Flight results fetched.")
-        ],
-        "llm_calls": state.get("llm_calls", 0) + 1
-    }
+# def flight_agent(state: TravelState):
+#     query = state["user_query"]
+#     flight_data = search_flights(query)
+
+#     return {
+#         "flight_results": flight_data,
+#         "messages": [
+#             AIMessage(content="Flight results fetched.")
+#         ],
+#         "llm_calls": state.get("llm_calls", 0) + 1
+#     }
+
+# Flight Tool Router Prompt
+FLIGHT_AGENT_PROMPT = """
+You are a travel flight expert.
+
+User Query:
+{query}
+
+Airport Information:
+{airport_data}
+
+Airline Information:
+{airline_data}
+
+Generate:
+
+1. Likely departure airport
+2. Likely arrival airport
+3. Airlines serving this route
+4. Typical flight duration
+5. Estimated airfare range
+6. Peak season pricing warning
+7. Booking advice
+
+Return concise travel guidance.
+"""
 
 #Hotel Agent
 def hotel_agent(state: TravelState):
