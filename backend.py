@@ -17,8 +17,9 @@ from langchain_core.messages import (
 )
 from langchain_groq import ChatGroq
 # from tools.tavily_tool import tavily_search
-from mcp_client_test import tavily_mcp_search
-from tools.flight_tool import search_flights
+# from tools.flight_tool import search_flights
+from mcp_client import tavily_mcp_search, aviation_mcp_call
+
 load_dotenv()
 os.environ["SSL_CERT_FILE"] = certifi.where()
 os.environ["REQUESTS_CA_BUNDLE"] = certifi.where()
