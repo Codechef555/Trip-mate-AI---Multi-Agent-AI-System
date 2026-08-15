@@ -10,6 +10,7 @@ mcp = FastMCP("Weather MCP Server")
 #loads the apikey from msn weather sector
 OPENWEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY")
 
+#displays the current weather data 
 @mcp.tool()
 def get_current_weather(city: str):
 
