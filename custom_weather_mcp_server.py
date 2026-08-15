@@ -36,7 +36,8 @@ def get_current_weather(city: str):
         "condition": data["weather"][0]["description"],
         "wind_speed": data["wind"]["speed"]
     }
-    
+ 
+#displays the history of forecasting data of weather in unique coordinates
 @mcp.tool()
 def get_forecast(city: str):
 
