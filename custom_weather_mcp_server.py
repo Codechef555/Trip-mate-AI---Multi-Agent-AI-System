@@ -7,7 +7,7 @@ load_dotenv()
 
 mcp = FastMCP("Weather MCP Server")
 
-
+#loads the apikey from msn weather sector
 OPENWEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY")
 
 @mcp.tool()
