@@ -307,3 +307,18 @@ async def forecast_mcp_search(city: str):
     )
 
     return result
+
+#Destination extractor
+def extract_destination(query: str):
+    prompt = f"""
+    Extract only the destination city or country.
+
+    Query:
+    {query}
+
+    Return only destination name.
+    """
+
+    response = llm.invoke(prompt)
+
+    return response.content.strip()
