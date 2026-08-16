@@ -224,3 +224,5 @@ async def aviation_mcp_call(
     return result
 
 # Weather MCP tools
+weather_tool = None
+forecast_tool = None
