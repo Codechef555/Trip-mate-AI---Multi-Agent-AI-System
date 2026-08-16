@@ -222,3 +222,5 @@ async def aviation_mcp_call(
     )
 
     return result
+
+# Weather MCP tools
