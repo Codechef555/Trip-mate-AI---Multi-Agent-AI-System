@@ -320,6 +320,7 @@ def run_travel_agent(user_input: str, thread_id: str | None = None):
             "user_query": user_input,
             "flight_results": "",
             "hotel_results": "",
+            "weather_results":"",
             "itinerary": "",
             "llm_calls": 0
         },
@@ -333,6 +334,7 @@ def run_travel_agent(user_input: str, thread_id: str | None = None):
         "answer": final_answer,
         "flight_results": result.get("flight_results", ""),
         "hotel_results": result.get("hotel_results", ""),
+        "weather_results": result.get("weather_results",""),
         "itinerary": result.get("itinerary", ""),
         "llm_calls": result.get("llm_calls", 0),
     }
