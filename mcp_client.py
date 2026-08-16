@@ -285,3 +285,14 @@ async def initialize_weather_tools():
             f"Available tools: "
             f"{available_tools or 'none'}"
         )
+
+async def weather_mcp_search(city: str):
+    await initialize_weather_tools()
+
+    result = await weather_tool.ainvoke(
+        {
+            "city": city
+        }
+    )
+
+    return result
