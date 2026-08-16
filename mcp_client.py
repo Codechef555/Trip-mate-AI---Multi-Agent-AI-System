@@ -296,3 +296,14 @@ async def weather_mcp_search(city: str):
     )
 
     return result
+
+async def forecast_mcp_search(city: str):
+    await initialize_weather_tools()
+
+    result = await forecast_tool.ainvoke(
+        {
+            "city": city
+        }
+    )
+
+    return result
