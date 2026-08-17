@@ -113,6 +113,15 @@ AGENT_ORDER = [
     "budget_agent",
     "itinerary_agent",
 ]
+
+def _llm_text(system_prompt: str, user_prompt: str) -> str:
+    response = llm.invoke(
+        [
+            SystemMessage(content=system_prompt),
+            HumanMessage(content=user_prompt),
+        ]
+    )
+    return str(response.content)
 # Flight Tool Router Prompt
 FLIGHT_AGENT_PROMPT = """
 You are a travel flight expert.
