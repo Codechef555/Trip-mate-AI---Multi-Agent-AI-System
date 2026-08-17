@@ -122,6 +122,17 @@ def _llm_text(system_prompt: str, user_prompt: str) -> str:
         ]
     )
     return str(response.content)
+
+def _json_from_llm(text: str) -> dict[str, Any]:
+    """Extract the first complete JSON object returned by the model."""
+    start = text.find("{")
+    end = text.rfind("}")
+
+    if start == -1 or end == -1 or end < start:
+        raise ValueError("The model did not return a JSON object.")
+
+    return json.loads(text[start : end + 1])
+    
 # Flight Tool Router Prompt
 FLIGHT_AGENT_PROMPT = """
 You are a travel flight expert.
