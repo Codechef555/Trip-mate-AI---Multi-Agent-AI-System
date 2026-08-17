@@ -132,7 +132,16 @@ def _json_from_llm(text: str) -> dict[str, Any]:
         raise ValueError("The model did not return a JSON object.")
 
     return json.loads(text[start : end + 1])
-    
+
+def _empty_constraints() -> dict[str, Any]:
+    return {
+        "destination": "",
+        "origin": "",
+        "duration": "",
+        "budget": "",
+        "travel_style": "",
+        "special_preferences": [],
+    }
 # Flight Tool Router Prompt
 FLIGHT_AGENT_PROMPT = """
 You are a travel flight expert.
