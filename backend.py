@@ -97,6 +97,15 @@ class TravelState(TypedDict, total=False):
 #         "llm_calls": state.get("llm_calls", 0) + 1
 #     }
 
+#Shared helpers
+KNOWN_AGENTS = {
+    "flight_agent",
+    "hotel_agent",
+    "weather_agent",
+    "budget_agent",
+    "itinerary_agent",
+}
+
 # Flight Tool Router Prompt
 FLIGHT_AGENT_PROMPT = """
 You are a travel flight expert.
