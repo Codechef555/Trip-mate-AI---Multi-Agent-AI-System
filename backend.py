@@ -446,7 +446,22 @@ Make the itinerary practical, budget-aware, and easy to follow.
     }
 #Human in the loop Approval 
 def human_approval_agent(state: TravelState):
-    
+    review = Interrupt(
+        {
+            "question" : "Do you approve this itinerary?",
+            "draft itinerary" : state.get("itinerary",""),
+            "approval_request" : state.get("approval_request", ""),
+            "selected_agents" :  state.get("selected_agents", []),
+            "supervisor_reasoning" : state.get("supervisor_reasoning", ""),
+            "expected_response" : {
+                "approved" : True,
+                "feedback" : "Optional Revision Feedback",
+            },
+        }
+    )
+    approved = bool(review.get("approved", "False"))
+    human_feedback = str()
+
 #Final Response Agent
 def final_agent(state: TravelState):
     final_prompt = f"""
