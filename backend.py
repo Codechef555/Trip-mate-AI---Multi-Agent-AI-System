@@ -566,6 +566,7 @@ def route_after_agent(current_agent: str):
         return "itinerary_agent"
 
     return route
+    
 #Graph setup
 graph = StateGraph(TravelState)
 
