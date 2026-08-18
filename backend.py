@@ -543,6 +543,10 @@ ROUTE_MAP = {
     "budget_agent": "budget_agent",
     "itinerary_agent": "itinerary_agent",
 }
+def _selected_agents(state: TravelState) -> list[str]:
+    selected = state.get("selected_agents", [])
+    return [agent for agent in AGENT_ORDER if agent in selected]
+    
 #Graph setup
 graph = StateGraph(TravelState)
 
