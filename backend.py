@@ -343,15 +343,13 @@ def flight_agent(state: TravelState):
     }
 
 #Hotel Agent
+# hotel_results = tavily_search(query)
 def hotel_agent(state: TravelState):
     query = f"Best hotels for {state['user_query']}"
-    # hotel_results = tavily_search(query)
     hotel_results = asyncio.run(tavily_mcp_search(query))
     return {
         "hotel_results": hotel_results,
-        "messages": [
-            AIMessage(content="Hotel information fetched.")
-        ],
+        "messages": [ AIMessage(content="Hotel information fetched.")],
         "llm_calls": state.get("llm_calls", 0) + 1
     }
 
