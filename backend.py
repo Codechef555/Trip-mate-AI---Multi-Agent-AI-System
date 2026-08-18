@@ -462,6 +462,12 @@ def human_approval_agent(state: TravelState):
     approved = bool(review.get("approved", "False"))
     human_feedback = str(review.get("feedback","").strip())
 
+    return {
+        "approved" : approved,
+        "human_feedback": human_feedback,
+        "messages": [AIMessage(content="Human approval step completed")]
+    }
+
 #Final Response Agent
 def final_agent(state: TravelState):
     final_prompt = f"""
