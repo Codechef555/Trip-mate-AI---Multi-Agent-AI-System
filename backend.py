@@ -440,7 +440,7 @@ Make the itinerary practical, budget-aware, and easy to follow.
     return {
         "itinerary": response.content,
         "approval_request": approval_request,
-        "messages": [response],
+        "messages": [AIMessage(content="Draft itinerary created for human review.")],
         "llm_calls": state.get("llm_calls", 0) + 1
     }
 
