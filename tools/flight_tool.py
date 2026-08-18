@@ -1,4 +1,4 @@
-Koimport pycountry
+import pycountry
 import os
 import re
 import airportsdata

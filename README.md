@@ -11,7 +11,7 @@ Architecture
 
 TripMate uses a Supervisor + Four Specialized Agents + MCP architecture.
 
-                                  User
+                              User Query Input
                                     │
                                     ▼
                           FastAPI Web Interface
