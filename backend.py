@@ -432,8 +432,11 @@ Make the itinerary practical, budget-aware, and easy to follow.
         HumanMessage(content=prompt)
     ])
 
+    approval_request = ()
+
     return {
         "itinerary": response.content,
+        "approval_request": approval_request,
         "messages": [response],
         "llm_calls": state.get("llm_calls", 0) + 1
     }
