@@ -519,7 +519,9 @@ Format the final answer beautifully using these sections:
 Important:
 - Be clear and practical.
 - Mention that live flight API may not provide ticket prices if pricing is unavailable.
+- Include weather-based travel advice.
 - Keep the response useful for real travel planning.
+- Incorporate the human feedback when revision was requested.
 """
 
     response = llm.invoke([
