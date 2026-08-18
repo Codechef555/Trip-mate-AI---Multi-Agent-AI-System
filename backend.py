@@ -546,7 +546,14 @@ ROUTE_MAP = {
 def _selected_agents(state: TravelState) -> list[str]:
     selected = state.get("selected_agents", [])
     return [agent for agent in AGENT_ORDER if agent in selected]
-    
+
+def route_from_supervisor(state: TravelState) -> str:
+    if not state.get("guardrail_allowed", True):
+        return "guardrail_blocked"
+
+    selected = _selected_agents(state)
+    return selected[0] if selected else "itinerary_agent"    
+
 #Graph setup
 graph = StateGraph(TravelState)
 
