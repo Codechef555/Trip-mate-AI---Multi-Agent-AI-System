@@ -460,7 +460,7 @@ def human_approval_agent(state: TravelState):
         }
     )
     approved = bool(review.get("approved", "False"))
-    human_feedback = str()
+    human_feedback = str(review.get("feedback","").strip())
 
 #Final Response Agent
 def final_agent(state: TravelState):
