@@ -488,14 +488,17 @@ Human Review:
 User Request:
 {state['user_query']}
 
+Supervisor Constraints:
+{state['trip_constraints',{}]}
+
 Flights:
-{state['flight_results']}
+{state.get['flight_results','']}
 
 Hotels:
-{state['hotel_results']}
+{state.get['hotel_results','']}
 
 Weather Results:
-{state['weather_results']}
+{state.get['weather_results','']}
 
 Itinerary:
 {state['itinerary']}
