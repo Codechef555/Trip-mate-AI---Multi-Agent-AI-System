@@ -470,6 +470,15 @@ def human_approval_agent(state: TravelState):
 
 #Final Response Agent
 def final_agent(state: TravelState):
+    if state.get("approved", False):
+        review_instruction = (
+            "The user approved the draft. Preserve its decisions while polishing it."
+        )
+    else:
+        review_instruction = f"""
+The user requested a revision. Apply this feedback carefully:
+{state.get('human_feedback', '') or 'Improve the draft before finalizing it.'}
+"""
     final_prompt = f"""
 Generate the final travel response for the user.
 
