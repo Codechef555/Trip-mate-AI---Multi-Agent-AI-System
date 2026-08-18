@@ -500,8 +500,11 @@ Hotels:
 Weather Results:
 {state.get['weather_results','']}
 
-Itinerary:
-{state['itinerary']}
+Budget Results:
+{state.get['budget_results','']}
+
+Draft Itinerary:
+{state.get['itinerary','']}
 
 Format the final answer beautifully using these sections:
 
