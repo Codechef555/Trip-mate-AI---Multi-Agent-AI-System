@@ -416,7 +416,7 @@ Flight Results:
 {state.get('flight_results'), ''}
 
 Hotel Results:
-{state.get('hotel_results')}
+{state.get('hotel_results'), ''}
 
 Weather Results:
 {state.get['weather_results']}
