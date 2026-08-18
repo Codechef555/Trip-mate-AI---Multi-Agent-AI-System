@@ -142,6 +142,9 @@ def _empty_constraints() -> dict[str, Any]:
         "travel_style": "",
         "special_preferences": [],
     }
+
+# Supervisor Agent + Input Guardrail
+
 # Flight Tool Router Prompt
 FLIGHT_AGENT_PROMPT = """
 You are a travel flight expert.
