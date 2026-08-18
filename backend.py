@@ -535,6 +535,14 @@ Important:
         "llm_calls": state.get("llm_calls", 0) + 1
     }
 #Dynamic Supervisor Routing 
+ROUTE_MAP = {
+    "guardrail_blocked": "guardrail_blocked",
+    "flight_agent": "flight_agent",
+    "hotel_agent": "hotel_agent",
+    "weather_agent": "weather_agent",
+    "budget_agent": "budget_agent",
+    "itinerary_agent": "itinerary_agent",
+}
 #Graph setup
 graph = StateGraph(TravelState)
 
