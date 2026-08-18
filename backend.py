@@ -530,6 +530,7 @@ Important:
     ])
 
     return {
+        "final_response": response.content,
         "messages": [response],
         "llm_calls": state.get("llm_calls", 0) + 1
     }
