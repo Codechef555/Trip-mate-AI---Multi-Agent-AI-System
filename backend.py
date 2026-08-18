@@ -355,30 +355,48 @@ def hotel_agent(state: TravelState):
 
 #Weather Agent
 def weather_agent(state: TravelState):
-
-    city = extract_destination(state["user_query"])
-
-    weather_data = asyncio.run(
-        weather_mcp_search(city)
+    city = extract_destination(
+        state["user_query"]
     )
 
-    forecast_data = asyncio.run(
-        forecast_mcp_search(city)
-    )
+    try:
+        weather_data = asyncio.run(
+            weather_mcp_search(city)
+        )
+
+        forecast_data = asyncio.run(
+            forecast_mcp_search(city)
+        )
+
+        weather_results = f"""
+Current Weather:
+{weather_data}
+
+Forecast:
+{forecast_data}
+"""
+
+    except Exception as exc:
+        print(
+            f"WEATHER AGENT MCP ERROR: "
+            f"{type(exc).__name__}: {exc}",
+            flush=True,
+        )
+
+        weather_results = (
+            f"Live weather information for {city} "
+            "is temporarily unavailable. Give general "
+            "seasonal guidance and advise the traveler "
+            "to verify the forecast before departure."
+        )
 
     return {
-        "weather_results": f"""
-        Current Weather:
-        {weather_data}
-
-        Forecast:
-        {forecast_data}
-        """,
+        "weather_results": weather_results,
         "messages": [
             AIMessage(
-                content="Weather information fetched"
+                content="Weather information processed."
             )
-        ]
+        ],
     }
 
 #Itenary Agent 
