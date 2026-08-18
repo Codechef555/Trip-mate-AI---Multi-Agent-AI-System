@@ -419,10 +419,10 @@ Hotel Results:
 {state.get('hotel_results'), ''}
 
 Weather Results:
-{state.get['weather_results']}
+{state.get('weather_results'), ''}
 
 Budget Results:
-{state.get['budget_results']}
+{state.get('budget_results'), ''}
 
 Make the itinerary practical, budget-aware, and easy to follow.
 """
