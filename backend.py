@@ -482,6 +482,9 @@ The user requested a revision. Apply this feedback carefully:
     final_prompt = f"""
 Generate the final travel response for the user.
 
+Human Review:
+{review_instruction}
+
 User Request:
 {state['user_query']}
 
