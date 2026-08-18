@@ -409,14 +409,20 @@ Create a complete travel itinerary.
 User Query:
 {state['user_query']}
 
+Trip Constraints:
+{state.get('trip_constraints'), {}}
+
 Flight Results:
-{state['flight_results']}
+{state.get('flight_results'), ''}
 
 Hotel Results:
-{state['hotel_results']}
+{state.get('hotel_results')}
 
 Weather Results:
-{state['weather_results']}
+{state.get['weather_results']}
+
+Budget Results:
+{state.get['budget_results']}
 
 Make the itinerary practical, budget-aware, and easy to follow.
 """
