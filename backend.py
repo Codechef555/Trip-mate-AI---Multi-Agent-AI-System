@@ -408,6 +408,14 @@ Analyze whether this trip is realistic for the user's budget.
 User Query:
 {state:['user_query']}
 
+Trip Constraints:
+{state.get('trip_constraints',{})}
+
+Flight Results:
+{state.get('flight_results','')}
+
+Hotel Results:
+{state.get('hotel_results','')}
 
 #Itenary Agent 
 def itinerary_agent(state: TravelState):
