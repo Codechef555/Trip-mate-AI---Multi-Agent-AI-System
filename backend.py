@@ -428,7 +428,12 @@ Return:
 
 If exact prices are unavailable, clearly label estimates as appropriate.
 """
-
+    response = llm.invoke(
+        [
+            SystemMessage(content="You are a practical travel budget analyst."),
+            HumanMessage(content=prompt),
+        ]
+    )
 #Itenary Agent 
 def itinerary_agent(state: TravelState):
     prompt = f"""
