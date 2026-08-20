@@ -620,6 +620,10 @@ graph.add_node("final_agent", final_agent)
 graph.add_edge(START,'supervisor')
 graph.add_conditional_edges('supervisor', route_from_supervisor, ROUTE_MAP)
 graph.add_conditional_edges('flight_agent', route_after_agent('flight_agent'), ROUTE_MAP)
+graph.add_conditional_edges('hotel_agent', route_after_agent('hotel_agent'), ROUTE_MAP)
+graph.add_conditional_edges('weather_agent', route_after_agent('weather_agent'),ROUTE_MAP)
+graph.add_conditional_edges('budget_agent', route_after_agent('budget_agent'), ROUTE_MAP)
+
 #Adds the node structure from start to end 
 #graph.add_edge(START, "flight_agent")
 #graph.add_edge("flight_agent", "hotel_agent")
