@@ -405,6 +405,10 @@ def budget_agent(state: TravelState):
     prompt = f"""
 Analyze whether this trip is realistic for the user's budget.
 
+User Query:
+{state:['user_query']}
+
+
 #Itenary Agent 
 def itinerary_agent(state: TravelState):
     prompt = f"""
