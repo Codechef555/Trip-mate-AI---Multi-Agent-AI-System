@@ -420,6 +420,15 @@ Hotel Results:
 Weather Results:
 {state.get('weather_results','')}
 
+Return:
+1. Estimated cost categories
+2. Budget risk areas
+3. Money-saving suggestions
+4. Overall feasibility 
+
+If exact prices are unavailable, clearly label estimates as appropriate.
+"""
+
 #Itenary Agent 
 def itinerary_agent(state: TravelState):
     prompt = f"""
