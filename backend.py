@@ -653,40 +653,11 @@ checkpointer.setup()
 travel_graph = graph.compile(checkpointer=checkpointer)
 
 #FastAPI function
-def run_travel_agent(user_input: str, thread_id: str | None = None):
-    if not thread_id:
-        thread_id = f"user_{uuid.uuid4().hex}"
+def _interrupt_payload(result: dict[str, Any]) -> dict[str, Any] | None:
+    interrupts = result.get("__interrupt__", [])
+    if not interrupts:
+        return None
 
-    config = {
-        "configurable": {
-            "thread_id": thread_id
-        }
-    }
-
-    result = travel_graph.invoke(
-        {
-            "messages": [
-                HumanMessage(content=user_input)
-            ],
-            "user_query": user_input,
-            "flight_results": "",
-            "hotel_results": "",
-            "weather_results":"",
-            "itinerary": "",
-            "llm_calls": 0
-        },
-        config=config
-    )
-
-    final_answer = result["messages"][-1].content
-
-    return {
-        "thread_id": thread_id,
-        "answer": final_answer,
-        "flight_results": result.get("flight_results", ""),
-        "hotel_results": result.get("hotel_results", ""),
-        "weather_results": result.get("weather_results",""),
-        "itinerary": result.get("itinerary", ""),
-        "llm_calls": result.get("llm_calls", 0),
-    }
-    
+    first_interrupt = interrupts[0]
+    payload = getattr(first_interrupt, "value", first_interrupt)
+    return payload if isinstance(payload, dict) else {"value": payload}
