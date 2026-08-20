@@ -434,6 +434,10 @@ If exact prices are unavailable, clearly label estimates as appropriate.
             HumanMessage(content=prompt),
         ]
     )
+
+    return {
+        "budget_results": response.content,
+    }
 #Itenary Agent 
 def itinerary_agent(state: TravelState):
     prompt = f"""
