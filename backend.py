@@ -438,7 +438,9 @@ If exact prices are unavailable, clearly label estimates as appropriate.
     return {
         "budget_results": response.content,
         "messages": [AIMessage(content="Budget assessment generated.")],
+        "llm_calls": state.get('llm_calls',0) + 1,
     }
+
 #Itenary Agent 
 def itinerary_agent(state: TravelState):
     prompt = f"""
@@ -607,6 +609,8 @@ def route_after_agent(current_agent: str):
 #Graph setup
 graph = StateGraph(TravelState)
 
+graph.add_node('supervisor',supervisor_agent)
+graph.add_node('guardrail_blocked',guardrail_blocked_agent)
 graph.add_node("flight_agent", flight_agent)
 graph.add_node("hotel_agent", hotel_agent)
 graph.add_node('weather_agent',weather_agent)
