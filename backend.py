@@ -703,3 +703,35 @@ def _serialize_result(
         "human_feedback": result.get("human_feedback", ""),
         "llm_calls": result.get("llm_calls", 0),
     }
+
+def run_travel_agent(user_input: str, thread_id: str | None = None):
+    """Start a new travel-planning run and pause at human approval."""
+    if not thread_id:
+        thread_id = f"user_{uuid.uuid4().hex}"
+
+    config = {"configurable": {"thread_id": thread_id}}
+
+    result = travel_graph.invoke(
+        {
+            "messages": [HumanMessage(content=user_input)],
+            "user_query": user_input,
+            "guardrail_allowed": True,
+            "guardrail_reason": "",
+            "selected_agents": [],
+            "trip_constraints": _empty_constraints(),
+            "supervisor_reasoning": "",
+            "flight_results": "",
+            "hotel_results": "",
+            "weather_results": "",
+            "budget_results": "",
+            "itinerary": "",
+            "approval_request": "",
+            "approved": False,
+            "human_feedback": "",
+            "final_response": "",
+            "llm_calls": 0,
+        },
+        config=config,
+    )
+
+    return _serialize_result(result, thread_id)
