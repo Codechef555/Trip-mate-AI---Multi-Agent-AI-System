@@ -627,6 +627,9 @@ graph.add_conditional_edges("budget_agent", route_after_agent("budget_agent"), R
 
 graph.add_edge("itinerary_agent", "human_approval")
 graph.add_edge("human_approval", "final_agent")
+graph.add_edge("final_agent", END)
+graph.add_edge("guardrail_blocked", END)
+
 #Adds the node structure from start to end 
 #graph.add_edge(START, "flight_agent")
 #graph.add_edge("flight_agent", "hotel_agent")
