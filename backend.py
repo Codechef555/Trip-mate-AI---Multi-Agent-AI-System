@@ -735,3 +735,9 @@ def run_travel_agent(user_input: str, thread_id: str | None = None):
     )
 
     return _serialize_result(result, thread_id)
+
+def resume_travel_agent(
+    thread_id: str,
+    approved: bool,
+    feedback: str = "",
+):
