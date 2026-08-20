@@ -741,3 +741,19 @@ def resume_travel_agent(
     approved: bool,
     feedback: str = "",
 ):
+    """Resume the paused LangGraph thread after human review."""
+    if not thread_id:
+        raise ValueError("thread_id is required to resume a travel plan.")
+
+    config = {"configurable": {"thread_id": thread_id}}
+    result = travel_graph.invoke(
+        Command(
+            resume={
+                "approved": approved,
+                "feedback": feedback.strip(),
+            }
+        ),
+        config=config,
+    )
+
+    return _serialize_result(result, thread_id)
