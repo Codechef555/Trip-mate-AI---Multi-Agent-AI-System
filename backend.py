@@ -437,6 +437,7 @@ If exact prices are unavailable, clearly label estimates as appropriate.
 
     return {
         "budget_results": response.content,
+        "messages": [AIMessage(content="Budget assessment generated.")],
     }
 #Itenary Agent 
 def itinerary_agent(state: TravelState):
