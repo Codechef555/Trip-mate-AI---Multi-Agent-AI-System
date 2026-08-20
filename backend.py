@@ -417,6 +417,9 @@ Flight Results:
 Hotel Results:
 {state.get('hotel_results','')}
 
+Weather Results:
+{state.get('weather_results','')}
+
 #Itenary Agent 
 def itinerary_agent(state: TravelState):
     prompt = f"""
