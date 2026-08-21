@@ -98,4 +98,7 @@ function showApproval(data) {
     waitingForApproval = true;
     const section = document.getElementById("approvalSection");
     const approvalRequest = document.getElementById("approvalRequest");
+    approvalRequest.textContent = data.approval_request ||
+        "Approve the draft or provide feedback before the final plan is generated.";
+    section.classList.remove("hidden");
 }
