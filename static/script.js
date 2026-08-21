@@ -277,5 +277,9 @@ function downloadPDF() {
             downloadBtn.textContent = oldText;
             downloadBtn.disabled = false;
         })
-
+        .catch(() => {
+            downloadBtn.textContent = oldText;
+            downloadBtn.disabled = false;
+            showError("Could not download PDF.");
+        });
 }
