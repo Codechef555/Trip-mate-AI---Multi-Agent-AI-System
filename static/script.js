@@ -248,6 +248,8 @@ function downloadPDF() {
     downloadBtn.disabled = true;
 
     const options = {
+        margin: 0.5,
+        filename: "ai-travel-plan.pdf",
 
     }
 }
