@@ -76,5 +76,10 @@ function showWorkflow(data) {
 }
 
 function showResult(answer, threadId, isDraft = false) {
+    latestAnswerMarkdown = answer || "";
 
+    const resultSection = document.getElementById("resultSection");
+    const resultBox = document.getElementById("resultBox");
+    const threadInfo = document.getElementById("threadInfo");
+    const resultTitle = document.getElementById("resultTitle");
 }
