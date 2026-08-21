@@ -87,4 +87,9 @@ function showResult(answer, threadId, isDraft = false) {
     threadInfo.textContent = `Thread ID: ${threadId}`;
     resultTitle.textContent = isDraft ? "Draft Travel Plan" : "Your Final AI Travel Plan";
     resultSection.classList.remove("hidden");
+
+    resultSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
 }
