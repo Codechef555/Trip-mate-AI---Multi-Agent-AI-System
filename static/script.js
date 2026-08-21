@@ -56,4 +56,11 @@ function showWorkflow(data) {
 
     reasoning.textContent = data.supervisior_reasoning || "supervisor routing completed.";
     chips.innerHTML = "";
+
+    (data.selected_agents || []).forEach((agent) => {
+        const chip = document.createElement("span");
+        chip.className = "agent-chip";
+        chip.textContent = AGENT_LABELS[agent] || agent;
+        chips.appendChild(chip);
+    });
 }
