@@ -39,3 +39,11 @@ function hideerror() {
     errorBox.classList.add("hidden");
     errorBox.textContent = "";
 }
+
+function renderMarkdown(element, markdown) {
+    if (typeof marked != "undefinded") {
+        element.innerHTML = marked.parse(markdown || "");
+    } else {
+        element.innerText = markdown || "";
+    }
+}
