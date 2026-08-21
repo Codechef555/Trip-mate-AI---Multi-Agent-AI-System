@@ -102,3 +102,7 @@ function showApproval(data) {
         "Approve the draft or provide feedback before the final plan is generated.";
     section.classList.remove("hidden");
 }
+
+function hideApproval() {
+
+}
