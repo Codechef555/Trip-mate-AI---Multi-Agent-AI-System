@@ -47,3 +47,10 @@ function renderMarkdown(element, markdown) {
         element.innerText = markdown || "";
     }
 }
+
+function showWorkflow(data) {
+    const section = document.getElementById("workflowSection");
+    const reasoning = document.getElementById("supervisorReasoning");
+    const chips = document.getElementById("agentChips");
+    const guardrailBadge = document.getElementById("guardrailBadge");
+}
