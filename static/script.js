@@ -108,3 +108,58 @@ function hideApproval() {
     document.getElementById("approvalSection").classList.add("hidden");
     document.getElementById("approvalFeedback").value = "";
 }
+
+async function sendMessage() {
+    hideError();
+
+    if (waitingForApproval) {
+        showError("Please approve or revise the current draft before starting another plan.");
+        return;
+    }
+
+    const input = document.getElementById("userInput");
+    const message = input.value.trim();
+
+    if (!message) {
+        showError("Please enter your travel request first.");
+        return;
+    }
+
+    setLoading(true, "draft");
+
+    try {
+        const response = await fetch("/api/travel", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                message: message,
+                thread_id: currentThreadId
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(data.error || "Something went wrong.");
+        }
+
+        currentThreadId = data.thread_id;
+        localStorage.setItem("travel_thread_id", currentThreadId);
+
+        showWorkflow(data);
+
+        if (data.requires_approval) {
+            showResult(data.itinerary || data.answer, data.thread_id, true);
+            showApproval(data);
+        } else {
+            hideApproval();
+            showResult(data.answer, data.thread_id, false);
+        }
+    } catch (error) {
+        showError(error.message);
+    } finally {
+        setLoading(false, "draft");
+    }
+}
