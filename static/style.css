@@ -95,3 +95,21 @@ body {
     font-size: 1.1rem;
     line-height: 1.7;
 }
+
+.planner-card,
+.workflow-section,
+.result-section,
+.approval-section {
+    background: rgba(15, 23, 42, 0.76);
+    border: 1px solid rgba(148, 163, 184, 0.26);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(20px);
+    border-radius: 28px;
+}
+
+.planner-card,
+.workflow-section,
+.result-section,
+.approval-section {
+    padding: 28px;
+}
