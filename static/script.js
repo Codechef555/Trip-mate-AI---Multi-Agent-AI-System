@@ -166,4 +166,9 @@ async function sendMessage() {
 
 async function submitApproval(approved) {
     hideError();
+
+    if (!currentThreadId || !waitingForApproval) {
+        showError("there is no draft waiting for Approval. ");
+        return;
+    }
 }
