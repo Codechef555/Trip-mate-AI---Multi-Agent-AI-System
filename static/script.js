@@ -32,5 +32,10 @@ function setLoading(isLoading, mode = "draft") {
         btnText.classList.remove("hidden");
         btnLoader.classList.add("hidden");
     }
+}
 
+function hideerror() {
+    const errorBox = document.getElementById("errorBox");
+    errorBox.classList.add("hidden");
+    errorBox.textContent = "";
 }
