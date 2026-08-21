@@ -224,3 +224,35 @@ textarea::placeholder {
     cursor: not-allowed;
     transform: none;
 }
+
+.quick-prompts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.quick-prompts button {
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    background: rgba(30, 41, 59, 0.7);
+    color: #dbeafe;
+    border-radius: 999px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.quick-prompts button:hover {
+    background: rgba(59, 130, 246, 0.2);
+    border-color: rgba(96, 165, 250, 0.5);
+}
+
+.eyebrow {
+    display: inline-block;
+    margin-bottom: 7px;
+    color: #93c5fd;
+    font-size: 0.78rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
