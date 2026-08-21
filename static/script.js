@@ -269,4 +269,13 @@ function downloadPDF() {
         }
     };
 
+    html2pdf()
+        .set(options)
+        .from(pdfContent)
+        .save()
+        .then(() => {
+            downloadBtn.textContent = oldText;
+            downloadBtn.disabled = false;
+        })
+
 }
