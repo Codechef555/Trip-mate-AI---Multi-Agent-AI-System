@@ -232,5 +232,8 @@ function copyResult() {
         .catch(() => {
             showError("Could not copy result.");
         });
+}
 
+function downloadPDF() {
+    const pdfContent = document.getElementById("pdfContent");
 }
