@@ -7,7 +7,7 @@ TripMate demonstrates how a central Supervisor Agent coordinates four specialize
 
 ---
 
-Architecture
+Architecture diagram 
 
 TripMate uses a Supervisor + Four Specialized Agents + MCP architecture.
 
