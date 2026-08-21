@@ -236,4 +236,9 @@ function copyResult() {
 
 function downloadPDF() {
     const pdfContent = document.getElementById("pdfContent");
+
+    if (!latestAnswerMarkdown || !pdfContent) {
+        showError("No travel plan available to download.")
+        return;
+    }
 }
