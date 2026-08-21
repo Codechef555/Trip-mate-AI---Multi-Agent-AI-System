@@ -256,3 +256,26 @@ textarea::placeholder {
     letter-spacing: 0.12em;
     text-transform: uppercase;
 }
+
+.guardrail-badge {
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    background: rgba(34, 197, 94, 0.12);
+    color: #86efac;
+    padding: 9px 13px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.guardrail-badge.blocked {
+    border-color: rgba(239, 68, 68, 0.35);
+    background: rgba(239, 68, 68, 0.13);
+    color: #fecaca;
+}
+
+.supervisor-reasoning {
+    color: #cbd5e1;
+    line-height: 1.7;
+    margin-bottom: 18px;
+}
