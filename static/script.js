@@ -212,5 +212,11 @@ async function submitApproval(approved) {
 }
 
 function copyResult() {
+    const resultBox = document.getElementById("resultBox");
+    const text = resultBox.innerText;
+
+    if (!text) {
+        return;
+    }
 
 }
