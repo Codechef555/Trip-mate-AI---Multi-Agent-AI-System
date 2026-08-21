@@ -210,3 +210,7 @@ async function submitApproval(approved) {
         setLoading(false, "approval");
     }
 }
+
+function copyResult() {
+
+}
