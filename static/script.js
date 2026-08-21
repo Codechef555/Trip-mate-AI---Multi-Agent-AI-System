@@ -82,4 +82,9 @@ function showResult(answer, threadId, isDraft = false) {
     const resultBox = document.getElementById("resultBox");
     const threadInfo = document.getElementById("threadInfo");
     const resultTitle = document.getElementById("resultTitle");
+
+    renderMarkdown(resultBox, latestAnswerMarkdown);
+    threadInfo.textContent = `Thread ID: ${threadId}`;
+    resultTitle.textContent = isDraft ? "Draft Travel Plan" : "Your Final AI Travel Plan";
+    resultSection.classList.remove("hidden");
 }
