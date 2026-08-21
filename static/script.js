@@ -20,4 +20,10 @@ function setLoading(isLoading, mode = "draft") {
     const btnLoader = document.getElementById("btnLoader");
     const approveBtn = document.getElementById("approveBtn");
     const reviseBtn = document.getElementById("reviseBtn");
+
+    sendBtn.disabled = isLoading;
+    approveBtn.disabled = isLoading;
+    reviseBtn.disabled = isLoading;
+
+
 }
