@@ -174,4 +174,12 @@ async function submitApproval(approved) {
 
     const feedbackInput = document.getElementById("approvalFeedback");
     const feedback = feedbackInput.value.trim();
+
+    if (!approved || !feedback) {
+        showError("please enter revision feedback before requesting changes.")
+        feedbackInput.focus();
+        return;
+    }
+    setLoading(true, "approval");
+
 }
