@@ -104,5 +104,7 @@ function showApproval(data) {
 }
 
 function hideApproval() {
-
+    waitingForApproval = false;
+    document.getElementById("approvalSection").classList.add("hidden");
+    document.getElementById("approvalFeedback").value = "";
 }
