@@ -250,6 +250,9 @@ function downloadPDF() {
     const options = {
         margin: 0.5,
         filename: "ai-travel-plan.pdf",
-
+        image: {
+            type: "jpeg",
+            quality: 0.98
+        },
     }
 }
