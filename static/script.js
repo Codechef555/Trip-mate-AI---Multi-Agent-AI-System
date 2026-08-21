@@ -13,3 +13,7 @@ const AGENT_LABELS = {
 function setPrompt(text) {
     document.getElementById("userInput").value = text;
 }
+
+function setLoading(isLoading, mode = "draft") {
+
+}
