@@ -241,4 +241,9 @@ function downloadPDF() {
         showError("No travel plan available to download.")
         return;
     }
+
+    const downloadBtn = document.querySelector(".download-btn");
+    const oldText = downloadBtn.textContent;
+    downloadBtn.textContent = "Preparing PDF...";
+    downloadBtn.disabled = true;
 }
