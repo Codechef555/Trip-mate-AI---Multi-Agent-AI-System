@@ -52,3 +52,14 @@ body {
     bottom: 8%;
     left: 35%;
 }
+
+.app-container {
+    width: min(1120px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 56px 0 30px;
+}
+
+.hero-section {
+    text-align: center;
+    margin-bottom: 34px;
+}
