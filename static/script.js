@@ -182,4 +182,31 @@ async function submitApproval(approved) {
     }
     setLoading(true, "approval");
 
+    try {
+        const response = await fetch("/api/travel/approve", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                thread_id: currentThreadId,
+                approved: approved,
+                feedback: feedback
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(data.error || "Could not resume the travel workflow.");
+        }
+
+        showWorkflow(data);
+        hideApproval();
+        showResult(data.answer, data.thread_id, false);
+    } catch (error) {
+        showError(error.message);
+    } finally {
+        setLoading(false, "approval");
+    }
 }
