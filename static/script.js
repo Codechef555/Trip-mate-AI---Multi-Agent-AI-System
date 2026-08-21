@@ -259,5 +259,14 @@ function downloadPDF() {
             useCORS: true,
             backgroundColor: "#ffffff"
         },
-    }
+        jsPDF: {
+            unit: "in",
+            format: "a4",
+            orientation: "portrait"
+        },
+        pagebreak: {
+            mode: ["avoid-all", "css", "legacy"]
+        }
+    };
+
 }
