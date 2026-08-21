@@ -166,3 +166,30 @@ body {
     background: #22c55e;
     box-shadow: 0 0 18px #22c55e;
 }
+
+.input-area {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: stretch;
+}
+
+textarea {
+    width: 100%;
+    min-height: 150px;
+    resize: vertical;
+    border: 1px solid rgba(148, 163, 184, 0.24);
+    border-radius: 22px;
+    background: rgba(2, 6, 23, 0.64);
+    color: #ffffff;
+    padding: 20px;
+    font-size: 1rem;
+    line-height: 1.6;
+    outline: none;
+    transition: 0.25s ease;
+}
+
+textarea:focus {
+    border-color: rgba(96, 165, 250, 0.85);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.18);
+}
