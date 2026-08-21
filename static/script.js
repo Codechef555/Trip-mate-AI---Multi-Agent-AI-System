@@ -15,5 +15,9 @@ function setPrompt(text) {
 }
 
 function setLoading(isLoading, mode = "draft") {
-
+    const sendBtn = document.getElementById("sendBtn");
+    const btnText = document.getElementById("btnText");
+    const btnLoader = document.getElementById("btnLoader");
+    const approveBtn = document.getElementById("approveBtn");
+    const reviseBtn = document.getElementById("reviseBtn");
 }
