@@ -53,4 +53,7 @@ function showWorkflow(data) {
     const reasoning = document.getElementById("supervisorReasoning");
     const chips = document.getElementById("agentChips");
     const guardrailBadge = document.getElementById("guardrailBadge");
+
+    reasoning.textContent = data.supervisior_reasoning || "supervisor routing completed.";
+    chips.innerHTML = "";
 }
