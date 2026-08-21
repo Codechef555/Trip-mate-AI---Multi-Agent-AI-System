@@ -95,5 +95,7 @@ function showResult(answer, threadId, isDraft = false) {
 }
 
 function showApproval(data) {
-
+    waitingForApproval = true;
+    const section = document.getElementById("approvalSection");
+    const approvalRequest = document.getElementById("approvalRequest");
 }
