@@ -219,4 +219,18 @@ function copyResult() {
         return;
     }
 
+    navigator.clipboard.writeText(text)
+        .then(() => {
+            const copyBtn = document.querySelector(".copy-btn");
+            const oldText = copyBtn.textContent;
+            copyBtn.textContent = "Copied!";
+
+            setTimeout(() => {
+                copyBtn.textContent = oldText;
+            }, 1400);
+        })
+        .catch(() => {
+            showError("Could not copy result.");
+        });
+
 }
