@@ -21,3 +21,10 @@ body {
         radial-gradient(circle at top right, rgba(168, 85, 247, 0.18), transparent 28%),
         linear-gradient(135deg, #07111f 0%, #0f172a 45%, #111827 100%);
 }
+
+.gradient-circle {
+    position: absolute;
+    border-radius: 999px;
+    filter: blur(60px);
+    opacity: 0.45;
+}
