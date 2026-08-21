@@ -163,3 +163,7 @@ async function sendMessage() {
         setLoading(false, "draft");
     }
 }
+
+async function submitApproval(approved) {
+    hideError();
+}
