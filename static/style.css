@@ -119,3 +119,28 @@ body {
 .approval-section {
     margin-top: 26px;
 }
+
+.card-header,
+.result-header,
+.workflow-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+.card-header h2,
+.result-header h2,
+.workflow-header h2,
+.approval-content h2 {
+    font-size: 1.45rem;
+    margin-bottom: 8px;
+}
+
+.card-header p,
+.result-header p,
+.approval-content p {
+    color: #94a3b8;
+    line-height: 1.5;
+}
