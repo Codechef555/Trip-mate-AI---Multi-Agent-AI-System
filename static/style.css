@@ -346,3 +346,116 @@ textarea::placeholder {
     font-size: 2rem;
     margin-bottom: 20px;
 }
+
+.result-box {
+    background: #ffffff;
+    color: #1f2937;
+    border: none;
+    padding: 0;
+    white-space: normal;
+    overflow-x: auto;
+}
+
+.result-box h1,
+.result-box h2,
+.result-box h3 {
+    color: #0f172a;
+    margin-top: 26px;
+    margin-bottom: 12px;
+    line-height: 1.25;
+    font-weight: 800;
+}
+
+.result-box h1:first-child,
+.result-box h2:first-child,
+.result-box h3:first-child {
+    margin-top: 0;
+}
+
+.result-box h1 {
+    font-size: 2rem;
+    border-bottom: 3px solid #2563eb;
+    padding-bottom: 10px;
+}
+
+.result-box h2 {
+    font-size: 1.45rem;
+    border-left: 5px solid #2563eb;
+    padding: 10px 0 10px 12px;
+    background: #eff6ff;
+    border-radius: 10px;
+}
+
+.result-box h3 {
+    font-size: 1.15rem;
+    color: #1d4ed8;
+}
+
+.result-box p {
+    margin-bottom: 14px;
+    line-height: 1.75;
+    color: #374151;
+}
+
+.result-box ul,
+.result-box ol {
+    margin: 10px 0 18px 24px;
+    color: #374151;
+}
+
+.result-box li {
+    margin-bottom: 8px;
+    line-height: 1.65;
+}
+
+.result-box strong {
+    color: #111827;
+    font-weight: 800;
+}
+
+.result-box hr {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 24px 0;
+}
+
+.result-box table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 18px 0;
+    color: #374151;
+}
+
+.result-box th,
+.result-box td {
+    border: 1px solid #e5e7eb;
+    padding: 10px;
+    text-align: left;
+}
+
+.result-box th {
+    background: #eff6ff;
+    color: #111827;
+    font-weight: 800;
+}
+
+.approval-section {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 20px;
+    border-color: rgba(245, 158, 11, 0.35);
+    background: linear-gradient(135deg,
+            rgba(120, 53, 15, 0.25),
+            rgba(15, 23, 42, 0.82));
+}
+
+.approval-icon {
+    display: grid;
+    place-items: center;
+    width: 54px;
+    height: 54px;
+    border-radius: 16px;
+    background: rgba(245, 158, 11, 0.16);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    font-size: 1.5rem;
+}
