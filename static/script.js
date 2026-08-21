@@ -9,3 +9,7 @@ const AGENT_LABELS = {
     budget_agent: "💰 Budget Agent",
     itinerary_agent: "🗓️ Itinerary Agent"
 };
+
+function setPrompt(text) {
+    document.getElementById("userInput").value = text;
+}
