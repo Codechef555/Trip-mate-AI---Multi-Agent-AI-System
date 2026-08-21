@@ -113,3 +113,9 @@ body {
 .approval-section {
     padding: 28px;
 }
+
+.workflow-section,
+.result-section,
+.approval-section {
+    margin-top: 26px;
+}
