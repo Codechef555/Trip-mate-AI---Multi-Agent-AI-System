@@ -11,3 +11,13 @@ body {
     color: #ffffff;
     overflow-x: hidden;
 }
+
+.page-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 32%),
+        radial-gradient(circle at top right, rgba(168, 85, 247, 0.18), transparent 28%),
+        linear-gradient(135deg, #07111f 0%, #0f172a 45%, #111827 100%);
+}
