@@ -171,4 +171,7 @@ async function submitApproval(approved) {
         showError("there is no draft waiting for Approval. ");
         return;
     }
+
+    const feedbackInput = document.getElementById("approvalFeedback");
+    const feedback = feedbackInput.value.trim();
 }
