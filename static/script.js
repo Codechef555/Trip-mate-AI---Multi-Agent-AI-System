@@ -25,5 +25,12 @@ function setLoading(isLoading, mode = "draft") {
     approveBtn.disabled = isLoading;
     reviseBtn.disabled = isLoading;
 
+    if (isLoading && mode === "draft") {
+        btnText.classList.add("hidden");
+        btnLoader.classList.remove("hidden");
+    } else {
+        btnText.classList.remove("hidden");
+        btnLoader.classList.add("hidden");
+    }
 
 }
