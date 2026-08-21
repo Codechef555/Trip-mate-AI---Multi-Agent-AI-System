@@ -246,4 +246,8 @@ function downloadPDF() {
     const oldText = downloadBtn.textContent;
     downloadBtn.textContent = "Preparing PDF...";
     downloadBtn.disabled = true;
+
+    const options = {
+
+    }
 }
