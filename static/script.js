@@ -63,4 +63,14 @@ function showWorkflow(data) {
         chip.textContent = AGENT_LABELS[agent] || agent;
         chips.appendChild(chip);
     });
+
+    if (data.guardrail_allowed === false) {
+        guardrailBadge.textContent = "Guardrail blocked";
+        guardrailBadge.classList.add("blocked");
+    } else {
+        guardrailBadge.textContent = "Guardrail passed";
+        guardrailBadge.classList.remove("blocked");
+    }
+
+    section.classList.remove("hidden");
 }
