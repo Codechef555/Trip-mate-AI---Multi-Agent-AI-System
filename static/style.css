@@ -488,3 +488,128 @@ textarea::placeholder {
     background: linear-gradient(135deg, #16a34a, #22c55e);
     box-shadow: 0 12px 28px rgba(34, 197, 94, 0.25);
 }
+
+.revise-btn {
+    background: linear-gradient(135deg, #d97706, #f59e0b);
+    box-shadow: 0 12px 28px rgba(245, 158, 11, 0.22);
+}
+
+.approve-btn:hover,
+.revise-btn:hover {
+    transform: translateY(-1px);
+}
+
+.error-box {
+    margin-top: 22px;
+    padding: 18px 20px;
+    border-radius: 18px;
+    background: rgba(239, 68, 68, 0.13);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    color: #fecaca;
+    line-height: 1.5;
+}
+
+.loader {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 3px solid rgba(255, 255, 255, 0.35);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spin 0.85s linear infinite;
+}
+
+.hidden {
+    display: none !important;
+}
+
+footer {
+    text-align: center;
+    color: #64748b;
+    padding: 30px 16px 40px;
+    font-size: 0.92rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media print {
+    body {
+        background: #ffffff;
+    }
+
+    .planner-card,
+    .workflow-section,
+    .approval-section,
+    .hero-section,
+    footer,
+    .result-actions,
+    #threadInfo {
+        display: none;
+    }
+
+    .result-section {
+        box-shadow: none;
+        border: none;
+        background: #ffffff;
+    }
+
+    .pdf-title {
+        display: block;
+    }
+}
+
+@media (max-width: 760px) {
+    .app-container {
+        padding-top: 34px;
+    }
+
+    .planner-card,
+    .workflow-section,
+    .result-section,
+    .approval-section {
+        padding: 20px;
+        border-radius: 22px;
+    }
+
+    .card-header,
+    .result-header,
+    .workflow-header {
+        flex-direction: column;
+    }
+
+    .input-area {
+        grid-template-columns: 1fr;
+    }
+
+    #sendBtn {
+        min-height: 56px;
+    }
+
+    .hero-section p {
+        font-size: 1rem;
+    }
+
+    .result-actions,
+    .approval-actions {
+        width: 100%;
+    }
+
+    .copy-btn,
+    .download-btn,
+    .approve-btn,
+    .revise-btn {
+        flex: 1;
+    }
+
+    .pdf-content {
+        padding: 20px;
+    }
+
+    .approval-section {
+        grid-template-columns: 1fr;
+    }
+}
