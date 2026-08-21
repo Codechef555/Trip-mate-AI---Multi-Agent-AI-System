@@ -93,3 +93,7 @@ function showResult(answer, threadId, isDraft = false) {
         block: "start"
     });
 }
+
+function showApproval(data) {
+
+}
