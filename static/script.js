@@ -74,3 +74,7 @@ function showWorkflow(data) {
 
     section.classList.remove("hidden");
 }
+
+function showResult(answer, threadId, isDraft = false) {
+
+}
